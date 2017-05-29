@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import requests
 import re
 import grequests
+from eig_state.state_manager import StateManager
 
 app = Flask("eig-brain")
 

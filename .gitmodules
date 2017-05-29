@@ -1,0 +1,3 @@
+[submodule "eig_state"]
+	path = eig_state
+	url = git@github.com:EigenAlexa/eig_state.git
