@@ -29,17 +29,26 @@ def handleRequest():
     sm.set_response(response)
     return response
 
+def exception_handler(request, exception):
+    print("Request Exception", exception, file=sys.stderr)
+
 def discriminate(text):
     try:
+        print(text, file=sys.stderr)
         reqs = [
           grequests.post('https://3ss5b0g2q4.execute-api.us-east-1.amazonaws.com/production',
                          data={'text':text}, timeout=2),
           grequests.get('http://107.22.159.20', params={'q': text}, timeout=3 )
+
         ]
-        aiml_res, goog_res = grequests.map(reqs)
+        aiml_res, goog_res = grequests.map(reqs, exception_handler=exception_handler)
         if goog_res and goog_res.text != "" and goog_res.text != 'Hello' and goog_res.text != 'Query not found':
+            print("Google", file=sys.stderr)
             return goog_res.text
         elif aiml_res:
+            print("aiml", file=sys.stderr)
+            if goog_res:
+                print(goog_res.text, file=sys.stderr)
             return aiml_res.text
         else:
             print("google response", goog_res)
@@ -47,7 +56,6 @@ def discriminate(text):
             return "Could you repeat that, please?"
     except requests.exceptions.RequestException:
         return "Could you repeat that, please?"
-
 if __name__ == '__main__':
     app.run()
     #app.run(debug=True, host="0.0.0.0", port=8081)
