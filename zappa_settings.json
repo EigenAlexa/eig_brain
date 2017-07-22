@@ -1,0 +1,8 @@
+{
+   "production": {
+        "project_name": "eig_brain_flask",
+	"app_function": "app.app", 
+        "s3_bucket": "zappa-ask-lambda",
+	"runtime":"python3.6"
+    }
+}
