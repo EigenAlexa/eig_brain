@@ -36,12 +36,13 @@ def discriminate(text):
     try:
         print(text, file=sys.stderr)
         reqs = [
-          grequests.post('https://3ss5b0g2q4.execute-api.us-east-1.amazonaws.com/production',
-                         data={'text':text}, timeout=2),
+            grequests.post('https://0jtxp1f1q8.execute-api.us-east-1.amazonaws.com/production',
+                         data={'text':text}, timeout=3),
           grequests.get('http://107.22.159.20', params={'q': text}, timeout=3 )
 
         ]
         aiml_res, goog_res = grequests.map(reqs, exception_handler=exception_handler)
+        print("AIML RES:", aiml_res, file=sys.stderr)
         if goog_res and goog_res.text != "" and goog_res.text != 'Hello' and goog_res.text != 'Query not found':
             print("Google", file=sys.stderr)
             return goog_res.text
@@ -54,7 +55,8 @@ def discriminate(text):
             print("google response", goog_res)
             print("aiml response", aiml_res)
             return "Could you repeat that, please?"
-    except requests.exceptions.RequestException:
+    except requests.exceptions.RequestException as e:
+        print(e, file=sys.stderr)
         return "Could you repeat that, please?"
 if __name__ == '__main__':
     app.run()
